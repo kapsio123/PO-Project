@@ -24,3 +24,19 @@
 /home/kapsio_pop/Vscode/PO/Project/Szachy/obj/Debug/net6.0/ref/Szachy.dll
 /home/kapsio_pop/Vscode/PO/Project/Szachy/obj/Debug/net6.0/Szachy.pdb
 /home/kapsio_pop/Vscode/PO/Project/Szachy/obj/Debug/net6.0/Szachy.genruntimeconfig.cache
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/b_bishop_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/b_king_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/b_knight_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/b_pawn_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/b_queen_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/b_rook_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/square brown dark_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/square brown light_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/square gray dark _png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/square gray light _png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/w_bishop_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/w_king_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/w_knight_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/w_pawn_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/w_queen_png_shadow_128px.xnb
+/home/kapsio_pop/Vscode/PO/Project/Szachy/bin/Debug/net6.0/Content/w_rook_png_shadow_128px.xnb

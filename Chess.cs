@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Boards;
+using Pieces;
 
 namespace Szachy;
 
@@ -26,13 +27,11 @@ public class Chess : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    public Game1()
+    public Chess()
     {
         _graphics = new GraphicsDeviceManager(this);
         _graphics.PreferredBackBufferWidth = spriteSize * 8;
         _graphics.PreferredBackBufferHeight = spriteSize * 8;
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
         board = new Board();
         
     }
@@ -40,7 +39,9 @@ public class Chess : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
+        Content.RootDirectory = "Content";
+        IsMouseVisible = true;
+        board.Initialize();
         base.Initialize();
     }
 
@@ -83,13 +84,45 @@ public class Chess : Game
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
+
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if ((j + i) % 2 == 0){
+                if((j + i) % 2 == 0){
                     _spriteBatch.Draw(TileLight, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
                 }
                 else{
                     _spriteBatch.Draw(TileDark, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                }
+                Piece temp = board.board[j, i];
+                if(temp != null){
+                    switch (temp.pieceId){
+                        case 1:
+                        if (temp.isWhite){
+                            _spriteBatch.Draw(PawnW, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        else{
+                            _spriteBatch.Draw(PawnB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        break;
+
+                        case 2:
+                        if (temp.isWhite){
+                            _spriteBatch.Draw(KnightW, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        else{
+                            _spriteBatch.Draw(KnightB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        break;
+
+                        case 3:
+                        if (temp.isWhite){
+                            _spriteBatch.Draw(BishopW, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        else{
+                            _spriteBatch.Draw(BishopB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        break;
+                    }
                 }
             }
         }

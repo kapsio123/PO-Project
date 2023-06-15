@@ -1,3 +1,3 @@
 ﻿
-using var game = new Szachy.Game1();
+using var game = new Szachy.Chess();
 game.Run();

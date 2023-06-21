@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Boards;
 using Pieces;
+using System;
 
 namespace Szachy;
 
@@ -26,6 +27,8 @@ public class Chess : Game
     Board board;
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private bool selected;
+    private Point selectedPiece_pos;
 
     public Chess()
     {
@@ -33,6 +36,7 @@ public class Chess : Game
         _graphics.PreferredBackBufferWidth = spriteSize * 8;
         _graphics.PreferredBackBufferHeight = spriteSize * 8;
         board = new Board();
+        selected = false;
         
     }
 
@@ -74,7 +78,26 @@ public class Chess : Game
             Exit();
 
         // TODO: Add your update logic here
-
+        MouseState mouse = Mouse.GetState();
+        Point current_pos = mouse.Position;
+        if(mouse.LeftButton == ButtonState.Pressed){
+            if(selected){
+                board.move(new System.Tuple<int, int>(selectedPiece_pos.X / spriteSize, selectedPiece_pos.Y / spriteSize),
+                           new System.Tuple<int, int>(current_pos.X / spriteSize, current_pos.Y / spriteSize));
+                selected  = false;
+            }
+            else{
+                if(board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize] != null){
+                    selected = true;
+                    selectedPiece_pos = current_pos;
+                }
+            }
+        }
+        /*System.Console.WriteLine(Mouse.GetState());
+        System.Console.WriteLine(selected);
+        System.Console.WriteLine(selectedPiece_pos.X / spriteSize);
+        */
+        System.Threading.Thread.Sleep(10);
         base.Update(gameTime);
     }
 
@@ -93,6 +116,7 @@ public class Chess : Game
                 else{
                     _spriteBatch.Draw(TileDark, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
                 }
+
                 Piece temp = board.board[j, i];
                 if(temp != null){
                     switch (temp.pieceId){
@@ -120,6 +144,33 @@ public class Chess : Game
                         }
                         else{
                             _spriteBatch.Draw(BishopB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        break;
+
+                        case 4:
+                        if (temp.isWhite){
+                            _spriteBatch.Draw(RookW, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        else{
+                            _spriteBatch.Draw(RookB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        break;
+
+                        case 5:
+                        if (temp.isWhite){
+                            _spriteBatch.Draw(QueenW, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        else{
+                            _spriteBatch.Draw(QueenB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        break;
+
+                        case 6:
+                        if (temp.isWhite){
+                            _spriteBatch.Draw(KingW, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
+                        }
+                        else{
+                            _spriteBatch.Draw(KingB, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
                         }
                         break;
                     }

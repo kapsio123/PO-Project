@@ -1,18 +1,48 @@
 using System;
+using Boards;
 
 namespace Pieces{
     public abstract class Piece{
         public int pieceId {get; init;}
         public bool isWhite {get; init;}
         public Tuple<int, int>  pos;
+        public bool[,] move_list = new bool[Board.width, Board.height];
+        public abstract void possible_moves(Board board);
+        public bool isLegal(Tuple<int, int> to){
+            return move_list[to.Item1, to.Item2];
+        }
+        public void move(Tuple<int, int> to, Board board){
+            this.pos = to;
+            this.possible_moves(board);
+        }
     }
 
     public class King : Piece{
-        public King(bool isWhite, Tuple<int, int> pos)
+        public King(bool isWhite, Tuple<int, int> pos, Board board)
         {
             this.pieceId = 6;
             this.isWhite = isWhite;
             this.pos = pos;
+            this.possible_moves(board);
+        }
+        public override void possible_moves(Board board)
+        {
+            bool[,] new_move_list = new bool[Board.width, Board.height];
+            foreach(bool b in new_move_list){
+                Console.WriteLine(b);
+            }
+
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    if(i == 0 && j == 0) continue;
+                    if(this.pos.Item1 + j < 0 || this.pos.Item1 + j > Board.width - 1) continue;
+                    if(this.pos.Item2 + i < 0 || this.pos.Item2 + i > Board.height - 1) continue;
+                    if(board.board[this.pos.Item1 + j, this.pos.Item2 + i] != null && board.board[this.pos.Item1 + j, this.pos.Item2 + i].isWhite == this.isWhite) continue;
+
+                    new_move_list[this.pos.Item1 + j, this.pos.Item2 + i] = true;
+                }
+            }
+            this.move_list = new_move_list;
         }
     }
 
@@ -22,6 +52,11 @@ namespace Pieces{
             this.isWhite = isWhite;
             this.pos = pos;
         }
+
+        public override void possible_moves(Board board)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Rook : Piece{
@@ -29,6 +64,11 @@ namespace Pieces{
             this.pieceId = 4;
             this.isWhite = isWhite;
             this.pos = pos;
+        }
+
+        public override void possible_moves(Board board)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -38,6 +78,11 @@ namespace Pieces{
             this.isWhite = isWhite;
             this.pos = pos;
         }
+
+        public override void possible_moves(Board board)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Knight : Piece{
@@ -46,6 +91,11 @@ namespace Pieces{
             this.isWhite = isWhite;
             this.pos = pos;
         }
+
+        public override void possible_moves(Board board)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Pawn : Piece{
@@ -53,6 +103,11 @@ namespace Pieces{
             this.pieceId = 1;
             this.isWhite = isWhite;
             this.pos = pos;
+        }
+
+        public override void possible_moves(Board board)
+        {
+            throw new NotImplementedException();
         }
     }
 }

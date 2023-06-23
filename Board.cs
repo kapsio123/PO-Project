@@ -18,7 +18,7 @@ public class Board{
         board[5, 0] = new Bishop(false, new Tuple<int, int>(5, 0));
         board[6, 0] = new Knight(false, new Tuple<int, int>(6, 0));
         board[7, 0] = new Rook(false, new Tuple<int, int>(7, 0));
-        for(int i = 0; i < width; i++) board[i, 1] = new Pawn(false, new Tuple<int, int>(i, 1));
+        for(int i = 0; i < width; i++) board[i, 1] = new Pawn(false, new Tuple<int, int>(i, 1), this);
 
         board[0, 7] = new Rook(true, new Tuple<int, int>(0, 7));
         board[1, 7] = new Knight(true, new Tuple<int, int>(1, 7));
@@ -28,12 +28,11 @@ public class Board{
         board[5, 7] = new Bishop(true, new Tuple<int, int>(5, 7));
         board[6, 7] = new Knight(true, new Tuple<int, int>(6, 7));
         board[7, 7] = new Rook(true, new Tuple<int, int>(7, 7));
-        for(int i = 0; i < width; i++) board[i, 6] = new Pawn(true, new Tuple<int, int>(i, 6));
-        System.Console.WriteLine(board[4, 7].move_list[5, 7]);
-        for(int i = 0; i < width; i++){
+        for(int i = 0; i < width; i++) board[i, 6] = new Pawn(true, new Tuple<int, int>(i, 6), this);
+        /*for(int i = 0; i < width; i++){
             board[i, 0].possible_moves(this);
             board[i, 7].possible_moves(this);
-        }
+        }*/
     }
 
     public bool move(Tuple<int, int> from, Tuple<int, int> to){
@@ -43,6 +42,13 @@ public class Board{
         board[from.Item1, from.Item2].move(to, this);
         board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
         board[from.Item1, from.Item2] = null;
+        this.update();
         return true;
+    }
+    void update(){
+        foreach(Piece p in board){
+            if(p == null) continue;
+            p.possible_moves(this);
+        }
     }
 }

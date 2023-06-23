@@ -37,7 +37,6 @@ public class Chess : Game
         _graphics.PreferredBackBufferHeight = spriteSize * 8;
         board = new Board();
         selected = false;
-        
     }
 
     protected override void Initialize()
@@ -80,11 +79,14 @@ public class Chess : Game
         // TODO: Add your update logic here
         MouseState mouse = Mouse.GetState();
         Point current_pos = mouse.Position;
-        if(mouse.LeftButton == ButtonState.Pressed){
+        int posX = current_pos.X / spriteSize;
+        int posY = current_pos.Y / spriteSize;
+        if(mouse.LeftButton == ButtonState.Pressed && current_pos != selectedPiece_pos && posX > 0 && posX < Board.width && posY > 0 && posY < Board.height){
             if(selected){
                 board.move(new System.Tuple<int, int>(selectedPiece_pos.X / spriteSize, selectedPiece_pos.Y / spriteSize),
                            new System.Tuple<int, int>(current_pos.X / spriteSize, current_pos.Y / spriteSize));
                 selected  = false;
+                selectedPiece_pos = new Point(42, 42);
             }
             else{
                 if(board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize] != null){
@@ -93,11 +95,10 @@ public class Chess : Game
                 }
             }
         }
-        /*System.Console.WriteLine(Mouse.GetState());
+        System.Console.WriteLine(Mouse.GetState());
         System.Console.WriteLine(selected);
-        System.Console.WriteLine(selectedPiece_pos.X / spriteSize);
-        */
-        System.Threading.Thread.Sleep(10);
+        System.Console.WriteLine(selectedPiece_pos.Y / spriteSize);
+        System.Console.WriteLine(System.DateTime.Now.TimeOfDay);
         base.Update(gameTime);
     }
 

@@ -13,7 +13,6 @@ namespace Pieces{
         }
         public void move(Tuple<int, int> to, Board board){
             this.pos = to;
-            this.possible_moves(board);
         }
     }
 
@@ -68,7 +67,68 @@ namespace Pieces{
 
         public override void possible_moves(Board board)
         {
-            throw new NotImplementedException();
+            bool tr, tl, br, bl;
+            tr = true; tl = true; br = true; bl = true;
+            bool[,] new_move_list = new bool[Board.width, Board.height];
+            for(int i = 1; i < Board.width; i++){
+                if(br){
+                    if(board.board[this.pos.Item1 + i, this.pos.Item2 + i] != null){
+                        if(board.board[this.pos.Item1 + i, this.pos.Item2 + i].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1 + i, this.pos.Item2 + i] = true;
+                            br = false;
+                        }
+                        else{
+                            br = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1 + i, this.pos.Item2 + i] = true;
+                    }
+                }
+                if(bl){
+                    if(board.board[this.pos.Item1 - i, this.pos.Item2 + i] != null){
+                        if(board.board[this.pos.Item1 - i, this.pos.Item2 + i].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1 - i, this.pos.Item2 + i] = true;
+                            bl = false;
+                        }
+                        else{
+                            bl = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1 - i, this.pos.Item2 + i] = true;
+                    }
+                }
+                if(tr){
+                    if(board.board[this.pos.Item1 + i, this.pos.Item2 - i] != null){
+                        if(board.board[this.pos.Item1 + i, this.pos.Item2 - i].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1 + i, this.pos.Item2 - i] = true;
+                            tr = false;
+                        }
+                        else{
+                            tr = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1 + i, this.pos.Item2 - i] = true;
+                    }
+                }
+                if(tl){
+                    if(board.board[this.pos.Item1 - i, this.pos.Item2 - i] != null){
+                        if(board.board[this.pos.Item1 - i, this.pos.Item2 - i].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1 - i, this.pos.Item2 - i] = true;
+                            tl = false;
+                        }
+                        else{
+                            tl = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1 - i, this.pos.Item2 - i] = true;
+                    }
+                }
+                this.move_list = new_move_list;
+            }
         }
     }
 
@@ -94,20 +154,39 @@ namespace Pieces{
 
         public override void possible_moves(Board board)
         {
-            throw new NotImplementedException();
+            bool[,] new_move_list = new bool[Board.width, Board.height];
+
+            
         }
     }
 
     public class Pawn : Piece{
-        public Pawn(bool isWhite, Tuple<int, int> pos){
+        public Pawn(bool isWhite, Tuple<int, int> pos, Board board){
             this.pieceId = 1;
             this.isWhite = isWhite;
             this.pos = pos;
+            this.possible_moves(board);
         }
 
         public override void possible_moves(Board board)
         {
-            throw new NotImplementedException();
+            bool[,] new_move_list = new bool[Board.width, Board.height];
+            int direction;
+            if(this.isWhite) direction = -1;
+            else direction = 1;
+
+            if(this.pos.Item2 + direction < Board.height || this.pos.Item2 + direction > 0){
+                if(board.board[this.pos.Item1, this.pos.Item2 + direction] == null) new_move_list[this.pos.Item1, this.pos.Item2 + direction] = true;
+    
+                if(this.pos.Item1 + 1 < Board.width && board.board[this.pos.Item1 + 1, this.pos.Item2 + direction] != null){
+                    if(board.board[this.pos.Item1 + 1, this.pos.Item2 + direction].isWhite != this.isWhite) new_move_list[this.pos.Item1 + 1, this.pos.Item2 + direction] = true;
+                }
+
+                if(this.pos.Item1 - 1 > 0 && board.board[this.pos.Item1 - 1, this.pos.Item2 + direction] != null){
+                    if(board.board[this.pos.Item1 - 1, this.pos.Item2 + direction].isWhite != this.isWhite) new_move_list[this.pos.Item1 - 1, this.pos.Item2 + direction] = true;
+                }
+            }
+            this.move_list = new_move_list;
         }
     }
 }

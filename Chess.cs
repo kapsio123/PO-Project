@@ -27,8 +27,9 @@ public class Chess : Game
     Board board;
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private bool selected;
-    private Point selectedPiece_pos;
+    bool selected;
+    bool White_turn;
+    Point selectedPiece_pos;
 
     public Chess()
     {
@@ -37,6 +38,7 @@ public class Chess : Game
         _graphics.PreferredBackBufferHeight = spriteSize * 8;
         board = new Board();
         selected = false;
+        White_turn = true;
     }
 
     protected override void Initialize()
@@ -81,10 +83,10 @@ public class Chess : Game
         Point current_pos = mouse.Position;
         int posX = current_pos.X / spriteSize;
         int posY = current_pos.Y / spriteSize;
-        if(mouse.LeftButton == ButtonState.Pressed && current_pos != selectedPiece_pos && posX > 0 && posX < Board.width && posY > 0 && posY < Board.height){
+        if(mouse.LeftButton == ButtonState.Pressed && current_pos != selectedPiece_pos && posX >= 0 && posX < Board.width && posY >= 0 && posY < Board.height){
             if(selected){
-                board.move(new System.Tuple<int, int>(selectedPiece_pos.X / spriteSize, selectedPiece_pos.Y / spriteSize),
-                           new System.Tuple<int, int>(current_pos.X / spriteSize, current_pos.Y / spriteSize));
+                if(board.move(new System.Tuple<int, int>(selectedPiece_pos.X / spriteSize, selectedPiece_pos.Y / spriteSize),
+                           new System.Tuple<int, int>(current_pos.X / spriteSize, current_pos.Y / spriteSize), White_turn)) White_turn = !White_turn;
                 selected  = false;
                 selectedPiece_pos = new Point(42, 42);
             }
@@ -95,10 +97,10 @@ public class Chess : Game
                 }
             }
         }
-        System.Console.WriteLine(Mouse.GetState());
+        /*System.Console.WriteLine(Mouse.GetState());
         System.Console.WriteLine(selected);
         System.Console.WriteLine(selectedPiece_pos.Y / spriteSize);
-        System.Console.WriteLine(System.DateTime.Now.TimeOfDay);
+        System.Console.WriteLine(System.DateTime.Now.TimeOfDay);*/
         base.Update(gameTime);
     }
 

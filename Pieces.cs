@@ -18,12 +18,16 @@ namespace Pieces{
 
     public class King : Piece{
         bool has_moved;
+        public int number_of_attackers;
+        public Piece[] attacked_by;
         public King(bool isWhite, Tuple<int, int> pos)
         {
             this.pieceId = 6;
             this.isWhite = isWhite;
             this.pos = pos;
             this.has_moved = false;
+            attacked_by = new Piece[Board.width * 2];
+            number_of_attackers = 0;
         }
         public override void possible_moves(Board board)
         {
@@ -82,6 +86,10 @@ namespace Pieces{
 
             this.pos = to;
             this.has_moved = true;
+        }
+        public bool inCheck(){
+            if(number_of_attackers > 0) return true;
+            return false;
         }
     }
 

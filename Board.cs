@@ -11,6 +11,8 @@ public class Board{
     public Board(){
         this.board = new Piece[height, width];
     }
+    public bool promotion {get; set;}
+    public Pawn toPromote {get; set;}
     public void Initialize(){
         board[0, 0] = new Rook(false, new Tuple<int, int>(0, 0));
         board[1, 0] = new Knight(false, new Tuple<int, int>(1, 0));
@@ -33,6 +35,9 @@ public class Board{
         board[6, 7] = new Knight(true, new Tuple<int, int>(6, 7));
         board[7, 7] = new Rook(true, new Tuple<int, int>(7, 7));
         for(int i = 0; i < width; i++) board[i, 6] = new Pawn(true, new Tuple<int, int>(i, 6));
+
+        promotion = false;
+
         this.update();
     }
 
@@ -40,13 +45,15 @@ public class Board{
         if(board[from.Item1, from.Item2].isWhite != White_turn) return false;
         if(!board[from.Item1, from.Item2].isLegal(to)) return false;
 
+        board[from.Item1, from.Item2].move(to, this);
+
         if(from == wKing_pos){
             wKing_pos = to;
         }
         else if(from == bKing_pos){
             bKing_pos = to;
         }
-        board[from.Item1, from.Item2].move(to, this);
+
         board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
         board[from.Item1, from.Item2] = null;
         this.update();
@@ -56,6 +63,31 @@ public class Board{
         foreach(Piece p in board){
             if(p == null) continue;
             p.possible_moves(this);
+        }
+    }
+    public void castle_long(bool isWhite){
+        if(isWhite){
+            board[0, 7].move(new Tuple<int, int>(3, 7), this);
+            board[3, 7] = board[0, 7];
+            board[0, 7] = null;
+        }
+        else{
+            board[0, 0].move(new Tuple<int, int>(3, 0), this);
+            board[3, 0] = board[0, 0];
+            board[0, 0] = null;
+        }
+    }
+
+    public void castle_short(bool isWhite){
+        if(isWhite){
+            board[7, 7].move(new Tuple<int, int>(5, 7), this);
+            board[5, 7] = board[7, 7];
+            board[7, 7] = null;
+        }
+        else{
+            board[7, 0].move(new Tuple<int, int>(5, 0), this);
+            board[5, 0] = board[7, 0];
+            board[7, 0] = null;
         }
     }
 }

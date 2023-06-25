@@ -39,9 +39,47 @@ namespace Pieces{
                     new_move_list[this.pos.Item1 + j, this.pos.Item2 + i] = true;
                 }
             }
+            bool OO, OOO;
+            OO = true; OOO = true;
+
+            if(!has_moved){
+                for(int i = 1; i < Board.width; i++){
+                    if(this.pos.Item1 + i < Board.width && OO){
+                        if(board.board[this.pos.Item1 + i, this.pos.Item2] != null){
+                            if(board.board[this.pos.Item1 + i, this.pos.Item2].isWhite == this.isWhite && board.board[this.pos.Item1 + i, this.pos.Item2] is Rook){
+                                Rook temp = (Rook)board.board[this.pos.Item1 + i, this.pos.Item2];
+                                if(!temp.has_moved){
+                                    new_move_list[this.pos.Item1 + 2, this.pos.Item2] = true;
+                                }
+                            }
+                            else OO = false;
+                        }
+                    }
+                    
+                    if(this.pos.Item1 - i >= 0 && OOO){
+                        if(board.board[this.pos.Item1 - i, this.pos.Item2] != null){
+                            if(board.board[this.pos.Item1 - i, this.pos.Item2].isWhite == this.isWhite && board.board[this.pos.Item1 - i, this.pos.Item2] is Rook){
+                                Rook temp = (Rook)board.board[this.pos.Item1 - i, this.pos.Item2];
+                                if(!temp.has_moved){
+                                    new_move_list[this.pos.Item1 - 2, this.pos.Item2] = true;
+                                }
+                            }
+                            else OOO = false;
+                        }
+                    }
+                }
+            }
+
             this.move_list = new_move_list;
         }
         public override void move(Tuple<int, int> to, Board board){
+            if(to.Item1 - 2 == this.pos.Item1){
+                board.castle_short(this.isWhite);
+            }
+            else if(to.Item1 + 2 == this.pos.Item1){
+                board.castle_long(this.isWhite);
+            }
+
             this.pos = to;
             this.has_moved = true;
         }
@@ -60,7 +98,7 @@ namespace Pieces{
             tr = true; tl = true; br = true; bl = true;
             bool[,] new_move_list = new bool[Board.width, Board.height];
             for(int i = 1; i < Board.width; i++){
-                if(br && this.pos.Item1 + i > 0 && this.pos.Item1 + i < Board.width && this.pos.Item2 + i > 0 && this.pos.Item2 + i < Board.height){
+                if(br && this.pos.Item1 + i >= 0 && this.pos.Item1 + i < Board.width && this.pos.Item2 + i >= 0 && this.pos.Item2 + i < Board.width){
                     if(board.board[this.pos.Item1 + i, this.pos.Item2 + i] != null){
                         if(board.board[this.pos.Item1 + i, this.pos.Item2 + i].isWhite != this.isWhite){
                             new_move_list[this.pos.Item1 + i, this.pos.Item2 + i] = true;
@@ -74,7 +112,7 @@ namespace Pieces{
                         new_move_list[this.pos.Item1 + i, this.pos.Item2 + i] = true;
                     }
                 }
-                if(bl && this.pos.Item1 - i > 0 && this.pos.Item1 - i < Board.width && this.pos.Item2 + i > 0 && this.pos.Item2 + i < Board.height){
+                if(bl && this.pos.Item1 - i >= 0 && this.pos.Item1 - i < Board.width && this.pos.Item2 + i >= 0 && this.pos.Item2 + i < Board.width){
                     if(board.board[this.pos.Item1 - i, this.pos.Item2 + i] != null){
                         if(board.board[this.pos.Item1 - i, this.pos.Item2 + i].isWhite != this.isWhite){
                             new_move_list[this.pos.Item1 - i, this.pos.Item2 + i] = true;
@@ -88,7 +126,7 @@ namespace Pieces{
                         new_move_list[this.pos.Item1 - i, this.pos.Item2 + i] = true;
                     }
                 }
-                if(tr && this.pos.Item1 + i > 0 && this.pos.Item1 + i < Board.width && this.pos.Item2 - i > 0 && this.pos.Item2 - i < Board.height){
+                if(tr && this.pos.Item1 + i >= 0 && this.pos.Item1 + i < Board.width && this.pos.Item2 - i >= 0 && this.pos.Item2 - i < Board.width){
                     if(board.board[this.pos.Item1 + i, this.pos.Item2 - i] != null){
                         if(board.board[this.pos.Item1 + i, this.pos.Item2 - i].isWhite != this.isWhite){
                             new_move_list[this.pos.Item1 + i, this.pos.Item2 - i] = true;
@@ -102,7 +140,7 @@ namespace Pieces{
                         new_move_list[this.pos.Item1 + i, this.pos.Item2 - i] = true;
                     }
                 }
-                if(tl && this.pos.Item1 - i > 0 && this.pos.Item1 - i < Board.width && this.pos.Item2 - i > 0 && this.pos.Item2 - i < Board.height){
+                if(tl && this.pos.Item1 - i >= 0 && this.pos.Item1 - i < Board.width && this.pos.Item2 - i >= 0 && this.pos.Item2 - i < Board.width){
                     if(board.board[this.pos.Item1 - i, this.pos.Item2 - i] != null){
                         if(board.board[this.pos.Item1 - i, this.pos.Item2 - i].isWhite != this.isWhite){
                             new_move_list[this.pos.Item1 - i, this.pos.Item2 - i] = true;
@@ -116,88 +154,11 @@ namespace Pieces{
                         new_move_list[this.pos.Item1 - i, this.pos.Item2 - i] = true;
                     }
                 }
-                this.move_list = new_move_list;
             }
             bool t, b, r, l;
             t = true; b = true; r = true; l = true;
             for(int i = 1; i < Board.width; i++){
-                if(b && this.pos.Item2 + i > 0 && this.pos.Item2 + i < Board.height){
-                    if(board.board[this.pos.Item1, this.pos.Item2 + i] != null){
-                        if(board.board[this.pos.Item1, this.pos.Item2 + i].isWhite != this.isWhite){
-                            new_move_list[this.pos.Item1, this.pos.Item2 + i] = true;
-                            b = false;
-                        }
-                        else{
-                            b = false;
-                        }
-                    }
-                    else{
-                        new_move_list[this.pos.Item1, this.pos.Item2 + i] = true;
-                    }
-                }
-                if(l && this.pos.Item1 - i > 0 && this.pos.Item1 + i < Board.width){
-                    if(board.board[this.pos.Item1 - i, this.pos.Item2] != null){
-                        if(board.board[this.pos.Item1 - i, this.pos.Item2].isWhite != this.isWhite){
-                            new_move_list[this.pos.Item1 - i, this.pos.Item2] = true;
-                            l = false;
-                        }
-                        else{
-                            l = false;
-                        }
-                    }
-                    else{
-                        new_move_list[this.pos.Item1 - i, this.pos.Item2] = true;
-                    }
-                }
-                if(r && this.pos.Item1 + i > 0 && this.pos.Item1 + i < Board.width){
-                    if(board.board[this.pos.Item1 + i, this.pos.Item2] != null){
-                        if(board.board[this.pos.Item1 + i, this.pos.Item2].isWhite != this.isWhite){
-                            new_move_list[this.pos.Item1 + i, this.pos.Item2] = true;
-                            r = false;
-                        }
-                        else{
-                            r = false;
-                        }
-                    }
-                    else{
-                        new_move_list[this.pos.Item1 + i, this.pos.Item2] = true;
-                    }
-                }
-                if(t && this.pos.Item2 - i > 0 && this.pos.Item2 - i < Board.height){
-                    if(board.board[this.pos.Item1, this.pos.Item2 - i] != null){
-                        if(board.board[this.pos.Item1, this.pos.Item2 - i].isWhite != this.isWhite){
-                            new_move_list[this.pos.Item1, this.pos.Item2 - i] = true;
-                            t = false;
-                        }
-                        else{
-                            t = false;
-                        }
-                    }
-                    else{
-                        new_move_list[this.pos.Item1, this.pos.Item2 - i] = true;
-                    }
-                }
-                this.move_list = new_move_list;
-            }
-        }
-    }
-
-    public class Rook : Piece{
-        bool has_moved;
-        public Rook(bool isWhite, Tuple<int, int> pos){
-            this.pieceId = 4;
-            this.isWhite = isWhite;
-            this.pos = pos;
-            this.has_moved = false;
-        }
-
-        public override void possible_moves(Board board)
-        {
-            bool t, b, r, l;
-            t = true; b = true; r = true; l = true;
-            bool[,] new_move_list = new bool[Board.width, Board.height];
-            for(int i = 1; i < Board.width; i++){
-                if(b && this.pos.Item2 + i > 0 && this.pos.Item2 + i < Board.height){
+                if(b && this.pos.Item2 + i >= 0 && this.pos.Item2 + i < Board.height){
                     if(board.board[this.pos.Item1, this.pos.Item2 + i] != null){
                         if(board.board[this.pos.Item1, this.pos.Item2 + i].isWhite != this.isWhite){
                             new_move_list[this.pos.Item1, this.pos.Item2 + i] = true;
@@ -253,8 +214,84 @@ namespace Pieces{
                         new_move_list[this.pos.Item1, this.pos.Item2 - i] = true;
                     }
                 }
-                this.move_list = new_move_list;
             }
+            this.move_list = new_move_list;
+        }
+    }
+
+    public class Rook : Piece{
+        public bool has_moved {get; private set;}
+        public Rook(bool isWhite, Tuple<int, int> pos){
+            this.pieceId = 4;
+            this.isWhite = isWhite;
+            this.pos = pos;
+            this.has_moved = false;
+        }
+
+        public override void possible_moves(Board board)
+        {
+            bool t, b, r, l;
+            t = true; b = true; r = true; l = true;
+            bool[,] new_move_list = new bool[Board.width, Board.height];
+            for(int i = 1; i < Board.width; i++){
+                if(b && this.pos.Item2 + i >= 0 && this.pos.Item2 + i < Board.height){
+                    if(board.board[this.pos.Item1, this.pos.Item2 + i] != null){
+                        if(board.board[this.pos.Item1, this.pos.Item2 + i].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1, this.pos.Item2 + i] = true;
+                            b = false;
+                        }
+                        else{
+                            b = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1, this.pos.Item2 + i] = true;
+                    }
+                }
+                if(l && this.pos.Item1 - i >= 0 && this.pos.Item1 - i < Board.width){
+                    if(board.board[this.pos.Item1 - i, this.pos.Item2] != null){
+                        if(board.board[this.pos.Item1 - i, this.pos.Item2].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1 - i, this.pos.Item2] = true;
+                            l = false;
+                        }
+                        else{
+                            l = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1 - i, this.pos.Item2] = true;
+                    }
+                }
+                if(r && this.pos.Item1 + i >= 0 && this.pos.Item1 + i < Board.width){
+                    if(board.board[this.pos.Item1 + i, this.pos.Item2] != null){
+                        if(board.board[this.pos.Item1 + i, this.pos.Item2].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1 + i, this.pos.Item2] = true;
+                            r = false;
+                        }
+                        else{
+                            r = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1 + i, this.pos.Item2] = true;
+                    }
+                }
+                if(t && this.pos.Item2 - i >= 0 && this.pos.Item2 - i < Board.height){
+                    if(board.board[this.pos.Item1, this.pos.Item2 - i] != null){
+                        if(board.board[this.pos.Item1, this.pos.Item2 - i].isWhite != this.isWhite){
+                            new_move_list[this.pos.Item1, this.pos.Item2 - i] = true;
+                            t = false;
+                        }
+                        else{
+                            t = false;
+                        }
+                    }
+                    else{
+                        new_move_list[this.pos.Item1, this.pos.Item2 - i] = true;
+                    }
+                }
+            }
+            this.move_list = new_move_list;
         }
         public override void move(Tuple<int, int> to, Board board){
             this.pos = to;
@@ -397,9 +434,9 @@ namespace Pieces{
     public class Pawn : Piece{
         bool has_moved;
         int direction;
-        protected bool en_passant;
-        protected bool en_passant_l;
-        protected bool en_passant_r;
+        bool en_passant;
+        bool en_passant_l;
+        bool en_passant_r;
         public Pawn(bool isWhite, Tuple<int, int> pos){
             this.pieceId = 1;
             this.isWhite = isWhite;
@@ -420,7 +457,7 @@ namespace Pieces{
                 en_passant_r = false;
             }
 
-            if(this.pos.Item2 + direction < Board.height || this.pos.Item2 + direction > 0){
+            if(this.pos.Item2 + direction < Board.height && this.pos.Item2 + direction >= 0){
                 if(board.board[this.pos.Item1, this.pos.Item2 + direction] == null){
                     new_move_list[this.pos.Item1, this.pos.Item2 + direction] = true;
                     if(!has_moved && board.board[this.pos.Item1, this.pos.Item2 + direction * 2] == null) new_move_list[this.pos.Item1, this.pos.Item2 + direction * 2] = true;
@@ -451,24 +488,31 @@ namespace Pieces{
         }
          public override void move(Tuple<int, int> to, Board board){
             if(!has_moved && to.Item2 == this.pos.Item2 + direction * 2){
-                if(board.board[to.Item1 + 1, to.Item2] != null && board.board[to.Item1 + 1, to.Item2].isWhite != this.isWhite && board.board[to.Item1 + 1, to.Item2] is Pawn){
+                if(to.Item1 + 1 < Board.width && board.board[to.Item1 + 1, to.Item2] != null && board.board[to.Item1 + 1, to.Item2].isWhite != this.isWhite && board.board[to.Item1 + 1, to.Item2] is Pawn){
                     Pawn temp = (Pawn)board.board[to.Item1 + 1, to.Item2];
                     temp.en_passant_l = true;
                     temp.en_passant = true;
                     board.board[to.Item1 + 1, to.Item2] = temp;
                 }
-                if(board.board[to.Item1 - 1, to.Item2] != null && board.board[to.Item1 - 1, to.Item2].isWhite != this.isWhite && board.board[to.Item1 - 1, to.Item2] is Pawn){
+                if(to.Item1 - 1 >= 0 && board.board[to.Item1 - 1, to.Item2] != null && board.board[to.Item1 - 1, to.Item2].isWhite != this.isWhite && board.board[to.Item1 - 1, to.Item2] is Pawn){
                     Pawn temp = (Pawn)board.board[to.Item1 - 1, to.Item2];
                     temp.en_passant_r = true;
                     temp.en_passant = true;
                     board.board[to.Item1 - 1, to.Item2] = temp;
                 }
             }
+            if(to.Item2 == 0 || to.Item2 == Board.height - 1){
+                this.promote(board);
+            }
             this.has_moved = true;
             if(to.Item1 > this.pos.Item1 && en_passant_r) board.board[to.Item1, to.Item2 - direction] = null;
             if(to.Item1 < this.pos.Item1 && en_passant_l) board.board[to.Item1, to.Item2 - direction] = null;
     
             this.pos = to;
+        }
+        void promote(Board board){
+            board.promotion = true;
+            board.toPromote = this;
         }
     }
 }

@@ -28,6 +28,7 @@ public class Chess : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     bool selected;
+    bool promotion;
     bool White_turn;
     Point selectedPiece_pos;
 
@@ -36,9 +37,6 @@ public class Chess : Game
         _graphics = new GraphicsDeviceManager(this);
         _graphics.PreferredBackBufferWidth = spriteSize * 8;
         _graphics.PreferredBackBufferHeight = spriteSize * 8;
-        board = new Board();
-        selected = false;
-        White_turn = true;
     }
 
     protected override void Initialize()
@@ -46,7 +44,11 @@ public class Chess : Game
         // TODO: Add your initialization logic here
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        board = new Board();
         board.Initialize();
+        selected = false;
+        White_turn = true;
+        promotion = false;
         base.Initialize();
     }
 
@@ -77,28 +79,55 @@ public class Chess : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
+        if (Keyboard.GetState().IsKeyDown(Keys.R))
+            this.Initialize();
         // TODO: Add your update logic here
         MouseState mouse = Mouse.GetState();
         Point current_pos = mouse.Position;
         int posX = current_pos.X / spriteSize;
         int posY = current_pos.Y / spriteSize;
-        if(mouse.LeftButton == ButtonState.Pressed && current_pos != selectedPiece_pos && posX >= 0 && posX < Board.width && posY >= 0 && posY < Board.height){
-            if(selected){
-                if(board.move(new System.Tuple<int, int>(selectedPiece_pos.X / spriteSize, selectedPiece_pos.Y / spriteSize),
-                           new System.Tuple<int, int>(current_pos.X / spriteSize, current_pos.Y / spriteSize), White_turn)) White_turn = !White_turn;
-                selected  = false;
-                selectedPiece_pos = new Point(42, 42);
-            }
-            else{
-                if(board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize] != null){
-                    selected = true;
-                    selectedPiece_pos = current_pos;
+        if(!promotion){
+            if(mouse.LeftButton == ButtonState.Pressed && current_pos != selectedPiece_pos && posX >= 0 && posX < Board.width && posY >= 0 && posY < Board.height){
+                if(selected){
+                    if(board.move(new System.Tuple<int, int>(selectedPiece_pos.X / spriteSize, selectedPiece_pos.Y / spriteSize),
+                            new System.Tuple<int, int>(current_pos.X / spriteSize, current_pos.Y / spriteSize), White_turn)) White_turn = !White_turn;
+                    selected  = false;
+                    selectedPiece_pos = new Point(42, 42);
+                    promotion = board.promotion;
+                    board.promotion = false;
+                }
+                else{
+                    if(board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize] != null && board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize].isWhite == White_turn){
+                        selected = true;
+                        selectedPiece_pos = current_pos;
+                    }
                 }
             }
         }
-        /*System.Console.WriteLine(Mouse.GetState());
-        System.Console.WriteLine(selected);
+        else if(mouse.LeftButton == ButtonState.Pressed && posX >= 0 && posX < Board.width && posY >= 0 && posY < Board.height){
+            Console.WriteLine(Board.height / 2 - 2);
+            if(posY == Board.height / 2 - 1){
+                if(posX == Board.width / 2 - 2){
+                    board.board[board.toPromote.pos.Item1, board.toPromote.pos.Item2] = new Knight(board.toPromote.isWhite, board.toPromote.pos);
+                    promotion = false;
+                }
+                else if(posX == Board.width / 2 - 1){
+                    board.board[board.toPromote.pos.Item1, board.toPromote.pos.Item2] = new Bishop(board.toPromote.isWhite, board.toPromote.pos);
+                    promotion = false;
+                }
+                else if(posX == Board.width / 2){
+                    board.board[board.toPromote.pos.Item1, board.toPromote.pos.Item2] = new Rook(board.toPromote.isWhite, board.toPromote.pos);
+                    promotion = false;
+                }
+                else if(posX == Board.width / 2 + 1){
+                    board.board[board.toPromote.pos.Item1, board.toPromote.pos.Item2] = new Queen(board.toPromote.isWhite, board.toPromote.pos);
+                    promotion = false;
+                }
+            }
+        }
+        System.Console.WriteLine(Mouse.GetState());
+        System.Console.WriteLine(_graphics.PreferredBackBufferWidth / 2 - spriteSize * 2);
+        /*System.Console.WriteLine(selected);
         System.Console.WriteLine(selectedPiece_pos.Y / spriteSize);
         System.Console.WriteLine(System.DateTime.Now.TimeOfDay);*/
         base.Update(gameTime);
@@ -119,7 +148,9 @@ public class Chess : Game
                 else{
                     _spriteBatch.Draw(TileDark, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.White);
                 }
-
+                if(j == this.selectedPiece_pos.X / spriteSize && i == this.selectedPiece_pos.Y / spriteSize && selected){
+                    _spriteBatch.Draw(TileDark, new Rectangle(spriteSize * j, spriteSize * i, spriteSize, spriteSize), Color.Cyan);
+                }
                 Piece temp = board.board[j, i];
                 if(temp != null){
                     switch (temp.pieceId){
@@ -179,6 +210,17 @@ public class Chess : Game
                     }
                 }
             }
+        }
+        if(promotion){
+            _spriteBatch.Draw(TileDark, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - spriteSize * 2, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.Black);
+            _spriteBatch.Draw(TileDark, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - spriteSize, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.Black);
+            _spriteBatch.Draw(TileDark, new Rectangle(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.Black);
+            _spriteBatch.Draw(TileDark, new Rectangle(_graphics.PreferredBackBufferWidth / 2 + spriteSize, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.Black);
+
+            _spriteBatch.Draw(KnightW, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - spriteSize * 2, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.White);
+            _spriteBatch.Draw(BishopW, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - spriteSize, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.White);
+            _spriteBatch.Draw(RookW, new Rectangle(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.White);
+            _spriteBatch.Draw(QueenW, new Rectangle(_graphics.PreferredBackBufferWidth / 2 + spriteSize, _graphics.PreferredBackBufferHeight / 2 - spriteSize, spriteSize, spriteSize), Color.White);
         }
         _spriteBatch.End();
 

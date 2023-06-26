@@ -51,6 +51,7 @@ public class Board{
         if(!board[from.Item1, from.Item2].isLegal(to)) return false;
 
         copy(board, prev);
+        King wKing_temp = new King((King)board[wKing.pos.Item1, wKing.pos.Item2]);
 
         board[from.Item1, from.Item2].move(to, this);
 
@@ -78,13 +79,13 @@ public class Board{
             }
             Console.WriteLine(wKing.number_of_attackers);
             copy(prev, board);
+            wKing = (King)board[wKing_temp.pos.Item1, wKing_temp.pos.Item2];
             this.update();
             return false;
         }
         else if(bKing.inCheck() && !White_turn){
             Console.WriteLine("eoeoeoeoe");
             copy(prev, board);
-            this.update();
             return false;
         }
         return true;

@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "6+HzQv17DVekoOyWrwlmVaX1xpdxX+CLAaYzGfNYnKiif/P2i0CLWzxTVbpfGzgMIJFjG6EgEEKpkA3W0ut7/w==",
+  "dgSpecHash": "QjntK5JXCn0//ctqzyZV/CDBocDFV05AR6UNf8fMXPss7Go+mSvAZYG7+l5Sa4F0uRDZQq7RQyL9riuxebka+A==",
   "success": true,
   "projectFilePath": "/home/kapsio_pop/Vscode/PO/Project/Szachy/Szachy.csproj",
   "expectedPackageFiles": [
     "/home/kapsio_pop/.nuget/packages/monogame.content.builder.task/3.8.1.303/monogame.content.builder.task.3.8.1.303.nupkg.sha512",
-    "/home/kapsio_pop/.nuget/packages/monogame.framework.desktopgl/3.8.1.303/monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+    "/home/kapsio_pop/.nuget/packages/monogame.framework.desktopgl/3.8.1.303/monogame.framework.desktopgl.3.8.1.303.nupkg.sha512",
+    "/home/kapsio_pop/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/6.0.16/microsoft.netcore.app.runtime.linux-x64.6.0.16.nupkg.sha512",
+    "/home/kapsio_pop/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/6.0.16/microsoft.aspnetcore.app.runtime.linux-x64.6.0.16.nupkg.sha512",
+    "/home/kapsio_pop/.nuget/packages/microsoft.netcore.app.crossgen2.linux-x64/6.0.16/microsoft.netcore.app.crossgen2.linux-x64.6.0.16.nupkg.sha512",
+    "/home/kapsio_pop/.nuget/packages/microsoft.netcore.app.host.linux-x64/6.0.16/microsoft.netcore.app.host.linux-x64.6.0.16.nupkg.sha512"
   ],
   "logs": []
 }

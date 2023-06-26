@@ -125,9 +125,8 @@ public class Chess : Game
                 }
             }
         }
-        System.Console.WriteLine(Mouse.GetState());
-        System.Console.WriteLine(_graphics.PreferredBackBufferWidth / 2 - spriteSize * 2);
-        /*System.Console.WriteLine(selected);
+        /*System.Console.WriteLine(Mouse.GetState());
+        System.Console.WriteLine(selected);
         System.Console.WriteLine(selectedPiece_pos.Y / spriteSize);
         System.Console.WriteLine(System.DateTime.Now.TimeOfDay);*/
         base.Update(gameTime);

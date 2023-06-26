@@ -57,21 +57,34 @@ public class Board{
         board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
         board[from.Item1, from.Item2] = null;
 
-        if(check){
+       /* if(check){
             this.update();
             if(check){
                 copy(prev, board);
                 return false;
             }
         }
-        else this.update();
+        else this.update();*/
+
+        this.update();
 
         if(wKing.inCheck() && White_turn){
+            Console.WriteLine("AAAAAAAAAAAAAAa");
+            foreach(Piece p in wKing.attacked_by){
+                if(p == null) continue;
+                Console.WriteLine(p);
+                Console.WriteLine(p.pos);
+                Console.WriteLine(p.isWhite);
+            }
+            Console.WriteLine(wKing.number_of_attackers);
             copy(prev, board);
+            this.update();
             return false;
         }
         else if(bKing.inCheck() && !White_turn){
+            Console.WriteLine("eoeoeoeoe");
             copy(prev, board);
+            this.update();
             return false;
         }
         return true;
@@ -122,8 +135,38 @@ public class Board{
     void copy(Piece[,] from, Piece[,] to){
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                to[i, j] = from[i, j];
+                if(from[i, j] is King){
+                    to[i, j] = new King((King)from[i, j]);
+                }
+                else if(from[i, j] is Queen){
+                    to[i, j] = new Queen((Queen)from[i, j]);
+                }
+                else if(from[i, j] is Rook){
+                    to[i, j] = new Rook((Rook)from[i, j]);
+                }
+                else if(from[i, j] is Bishop){
+                    to[i, j] = new Bishop((Bishop)from[i, j]);
+                }
+                else if(from[i, j] is Knight){
+                    to[i, j] = new Knight((Knight)from[i, j]);
+                }
+                else if(from[i, j] is Pawn){
+                    to[i, j] = new Pawn((Pawn)from[i, j]);
+                }
+                else to[i, j] = null;
             }
         }
+    }
+    bool sim_move(Tuple<int, int> from, Tuple<int, int> to){
+        if(!board[from.Item1, from.Item2].isLegal(to)) return false;
+        Piece[,] temp = new Piece[width, height];
+        copy(board, prev);
+
+        board[from.Item1, from.Item2].move(to, this);
+
+        board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
+        board[from.Item1, from.Item2] = null;
+
+        return true;
     }
 }

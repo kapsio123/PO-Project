@@ -29,6 +29,19 @@ namespace Pieces{
             attacked_by = new Piece[Board.width * 2];
             number_of_attackers = 0;
         }
+        public King(King p){
+            this.pieceId = 6;
+            this.isWhite = p.isWhite;
+            this.pos = new Tuple<int, int>(p.pos.Item1, p.pos.Item2);
+            this.has_moved = p.has_moved;
+            attacked_by = p.attacked_by;
+            this.number_of_attackers = p.number_of_attackers;
+            for(int i = 0; i < Board.width; i++){
+                for(int j = 0; j < Board.height; j++){
+                    this.move_list[i, j] = p.move_list[i, j];
+                }
+            }
+        }
         public override void possible_moves(Board board)
         {
             bool[,] new_move_list = new bool[Board.width, Board.height];
@@ -98,6 +111,17 @@ namespace Pieces{
             this.pieceId = 5;
             this.isWhite = isWhite;
             this.pos = pos;
+        }
+
+        public Queen(Queen p){
+            this.pieceId = 5;
+            this.isWhite = p.isWhite;
+            this.pos = new Tuple<int, int>(p.pos.Item1, p.pos.Item2);
+            for(int i = 0; i < Board.width; i++){
+                for(int j = 0; j < Board.height; j++){
+                    this.move_list[i, j] = p.move_list[i, j];
+                }
+            }
         }
 
         public override void possible_moves(Board board)
@@ -235,6 +259,17 @@ namespace Pieces{
             this.pos = pos;
             this.has_moved = false;
         }
+        public Rook(Rook p){
+            this.pieceId = 4;
+            this.isWhite = p.isWhite;
+            this.pos = new Tuple<int, int>(p.pos.Item1, p.pos.Item2);
+            for(int i = 0; i < Board.width; i++){
+                for(int j = 0; j < Board.height; j++){
+                    this.move_list[i, j] = p.move_list[i, j];
+                }
+            }
+            this.has_moved = p.has_moved;
+        }
 
         public override void possible_moves(Board board)
         {
@@ -313,6 +348,16 @@ namespace Pieces{
             this.isWhite = isWhite;
             this.pos = pos;
         }
+        public Bishop(Bishop p){
+            this.pieceId = 3;
+            this.isWhite = p.isWhite;
+            this.pos = new Tuple<int, int>(p.pos.Item1, p.pos.Item2);
+            for(int i = 0; i < Board.width; i++){
+                for(int j = 0; j < Board.height; j++){
+                    this.move_list[i, j] = p.move_list[i, j];
+                }
+            }
+        }
 
         public override void possible_moves(Board board)
         {
@@ -375,9 +420,9 @@ namespace Pieces{
                     else{
                         new_move_list[this.pos.Item1 - i, this.pos.Item2 - i] = true;
                     }
-                }
-                this.move_list = new_move_list;
+                }    
             }
+            this.move_list = new_move_list;
         }
     }
 
@@ -386,6 +431,16 @@ namespace Pieces{
             this.pieceId = 2;
             this.isWhite = isWhite;
             this.pos = pos;
+        }
+        public Knight(Knight p){
+            this.pieceId = 2;
+            this.isWhite = p.isWhite;
+            this.pos = new Tuple<int, int>(p.pos.Item1, p.pos.Item2);
+            for(int i = 0; i < Board.width; i++){
+                for(int j = 0; j < Board.height; j++){
+                    this.move_list[i, j] = p.move_list[i, j];
+                }
+            }
         }
 
         public override void possible_moves(Board board)
@@ -455,6 +510,21 @@ namespace Pieces{
             en_passant_r = false;
             if(this.isWhite) direction = -1;
             else direction = 1;
+        }
+        public Pawn(Pawn p){
+            this.pieceId = 1;
+            this.isWhite = p.isWhite;
+            this.pos = new Tuple<int, int>(p.pos.Item1, p.pos.Item2);
+            this.has_moved = p.has_moved;
+            this.en_passant = p.en_passant;
+            this.en_passant_l = p.en_passant_l;
+            this.en_passant_r = p.en_passant_r;
+            for(int i = 0; i < Board.width; i++){
+                for(int j = 0; j < Board.height; j++){
+                    this.move_list[i, j] = p.move_list[i, j];
+                }
+            }
+            this.direction = p.direction;
         }
         public override void possible_moves(Board board)
         {

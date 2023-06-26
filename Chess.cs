@@ -99,6 +99,7 @@ public class Chess : Game
                         System.Console.Write("Win: ");
                         if(!White_turn) System.Console.WriteLine("White");
                         else System.Console.WriteLine("Black");
+                        //Exit();
                     } 
                 }
                 else{

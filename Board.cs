@@ -67,7 +67,9 @@ public class Board{
             foreach(Piece p in wKing.attacked_by){
                 if(p == null) continue;
                 Console.WriteLine(p.pos);
+                Console.WriteLine(p);
             }
+            this.update();
             return false;
         }
         else if(bKing.inCheck() && !White_turn){
@@ -78,6 +80,7 @@ public class Board{
                 if(p == null) continue;
                 Console.WriteLine(p.pos);
             }
+            this.update();
             return false;
         }
         return true;

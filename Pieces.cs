@@ -12,7 +12,7 @@ namespace Pieces{
             return move_list[to.Item1, to.Item2];
         }
         public virtual void move(Tuple<int, int> to, Board board){
-            this.pos = to;
+            this.pos = new Tuple<int, int>(to.Item1, to.Item2);
         }
     }
 
@@ -59,7 +59,7 @@ namespace Pieces{
             bool OO, OOO;
             OO = true; OOO = true;
 
-            if(!has_moved){
+            if(!has_moved && !inCheck()){
                 for(int i = 1; i < Board.width; i++){
                     if(this.pos.Item1 + i < Board.width && OO){
                         if(board.board[this.pos.Item1 + i, this.pos.Item2] != null){
@@ -96,7 +96,7 @@ namespace Pieces{
             else if(to.Item1 + 2 == this.pos.Item1){
                 board.castle_long(this.isWhite);
             }
-            this.pos = to;
+            this.pos = new Tuple<int, int>(to.Item1, to.Item2);
             this.has_moved = true;
         }
         public bool inCheck(){
@@ -336,7 +336,7 @@ namespace Pieces{
             this.move_list = new_move_list;
         }
         public override void move(Tuple<int, int> to, Board board){
-            this.pos = to;
+            this.pos = new Tuple<int, int>(to.Item1, to.Item2);
             this.has_moved = true;
         }
     }
@@ -585,7 +585,7 @@ namespace Pieces{
             if(to.Item1 > this.pos.Item1 && en_passant_r) board.board[to.Item1, to.Item2 - direction] = null;
             if(to.Item1 < this.pos.Item1 && en_passant_l) board.board[to.Item1, to.Item2 - direction] = null;
     
-            this.pos = to;
+            this.pos = new Tuple<int, int>(to.Item1, to.Item2);
         }
         void promote(Board board){
             board.promotion = true;

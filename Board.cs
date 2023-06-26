@@ -63,11 +63,21 @@ public class Board{
         if(wKing.inCheck() && White_turn){
             copy(prev, board);
             wKing = (King)board[wKing_temp.pos.Item1, wKing_temp.pos.Item2];
+            bKing = (King)board[bKing_temp.pos.Item1, bKing_temp.pos.Item2];
+            foreach(Piece p in wKing.attacked_by){
+                if(p == null) continue;
+                Console.WriteLine(p.pos);
+            }
             return false;
         }
         else if(bKing.inCheck() && !White_turn){
             copy(prev, board);
+            wKing = (King)board[wKing_temp.pos.Item1, wKing_temp.pos.Item2];
             bKing = (King)board[bKing_temp.pos.Item1, bKing_temp.pos.Item2];
+            foreach(Piece p in bKing.attacked_by){
+                if(p == null) continue;
+                Console.WriteLine(p.pos);
+            }
             return false;
         }
         return true;
@@ -137,18 +147,6 @@ public class Board{
                 else to[i, j] = null;
             }
         }
-    }
-    bool sim_move(Tuple<int, int> from, Tuple<int, int> to){
-        if(!board[from.Item1, from.Item2].isLegal(to)) return false;
-        Piece[,] temp = new Piece[width, height];
-        copy(board, prev);
-
-        board[from.Item1, from.Item2].move(to, this);
-
-        board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
-        board[from.Item1, from.Item2] = null;
-
-        return true;
     }
 
     public bool is_mate(bool isWhite){

@@ -96,7 +96,6 @@ namespace Pieces{
             else if(to.Item1 + 2 == this.pos.Item1){
                 board.castle_long(this.isWhite);
             }
-
             this.pos = to;
             this.has_moved = true;
         }

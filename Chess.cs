@@ -95,7 +95,7 @@ public class Chess : Game
                     selectedPiece_pos = new Point(42, 42);
                     promotion = board.promotion;
                     board.promotion = false;
-                    if(board.is_mate(White_turn)){
+                    if(board.is_mate(White_turn) && (board.wKing.inCheck() || board.bKing.inCheck())){
                         System.Console.Write("Win: ");
                         if(!White_turn) System.Console.WriteLine("White");
                         else System.Console.WriteLine("Black");

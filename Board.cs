@@ -9,7 +9,6 @@ public class Board{
     public King bKing {get; private set;}
     public Piece[,] board {get; private set;}
     public Piece[,] prev {get; private set;}
-    public bool check;
     public Board(){
         this.board = new Piece[height, width];
         this.prev =  new Piece[height, width];
@@ -17,7 +16,6 @@ public class Board{
     public bool promotion {get; set;}
     public Pawn toPromote {get; set;}
     public void Initialize(){
-        check = false;
         board[0, 0] = new Rook(false, new Tuple<int, int>(0, 0));
         board[1, 0] = new Knight(false, new Tuple<int, int>(1, 0));
         board[2, 0] = new Bishop(false, new Tuple<int, int>(2, 0));
@@ -47,45 +45,29 @@ public class Board{
     }
 
     public bool move(Tuple<int, int> from, Tuple<int, int> to, bool White_turn){
+        if(board[from.Item1, from.Item2] == null) return false;
         if(board[from.Item1, from.Item2].isWhite != White_turn) return false;
         if(!board[from.Item1, from.Item2].isLegal(to)) return false;
 
         copy(board, prev);
         King wKing_temp = new King((King)board[wKing.pos.Item1, wKing.pos.Item2]);
+        King bKing_temp = new King((King)board[bKing.pos.Item1, bKing.pos.Item2]);
 
         board[from.Item1, from.Item2].move(to, this);
 
         board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
         board[from.Item1, from.Item2] = null;
 
-       /* if(check){
-            this.update();
-            if(check){
-                copy(prev, board);
-                return false;
-            }
-        }
-        else this.update();*/
-
         this.update();
 
         if(wKing.inCheck() && White_turn){
-            Console.WriteLine("AAAAAAAAAAAAAAa");
-            foreach(Piece p in wKing.attacked_by){
-                if(p == null) continue;
-                Console.WriteLine(p);
-                Console.WriteLine(p.pos);
-                Console.WriteLine(p.isWhite);
-            }
-            Console.WriteLine(wKing.number_of_attackers);
             copy(prev, board);
             wKing = (King)board[wKing_temp.pos.Item1, wKing_temp.pos.Item2];
-            this.update();
             return false;
         }
         else if(bKing.inCheck() && !White_turn){
-            Console.WriteLine("eoeoeoeoe");
             copy(prev, board);
+            bKing = (King)board[bKing_temp.pos.Item1, bKing_temp.pos.Item2];
             return false;
         }
         return true;
@@ -105,8 +87,6 @@ public class Board{
                 bKing.number_of_attackers += 1;
             }
         }
-        if(wKing.inCheck() || bKing.inCheck()) check = true;
-        else check = false;
     }
     public void castle_long(bool isWhite){
         if(isWhite){
@@ -168,6 +148,31 @@ public class Board{
         board[to.Item1, to.Item2] = board[from.Item1, from.Item2];
         board[from.Item1, from.Item2] = null;
 
+        return true;
+    }
+
+    public bool is_mate(bool isWhite){
+        Piece[,] curr = new Piece[width, height];
+        King wKing_temp = new King((King)board[wKing.pos.Item1, wKing.pos.Item2]);
+        King bKing_temp = new King((King)board[bKing.pos.Item1, bKing.pos.Item2]);
+        copy(board, curr);
+        foreach(Piece p in board){
+            if(p == null) continue;
+            if(p.isWhite != isWhite) continue;
+            for(int i = 0; i < width; i++){
+                for(int j = 0; j < height; j++){
+                    if(p.move_list[i, j]){
+                        if(this.move(new Tuple<int, int>(p.pos.Item1, p.pos.Item2), new Tuple<int, int>(i, j), isWhite)){
+                            copy(curr, board);
+                            wKing = (King)board[wKing_temp.pos.Item1, wKing_temp.pos.Item2];
+                            bKing = (King)board[bKing_temp.pos.Item1, bKing_temp.pos.Item2];
+                            return false;
+                        }
+                    }
+                }
+            }
+
+        }
         return true;
     }
 }

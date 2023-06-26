@@ -95,6 +95,11 @@ public class Chess : Game
                     selectedPiece_pos = new Point(42, 42);
                     promotion = board.promotion;
                     board.promotion = false;
+                    if(board.is_mate(White_turn)){
+                        System.Console.Write("Win: ");
+                        if(!White_turn) System.Console.WriteLine("White");
+                        else System.Console.WriteLine("Black");
+                    } 
                 }
                 else{
                     if(board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize] != null && board.board[current_pos.X / spriteSize, current_pos.Y / spriteSize].isWhite == White_turn){
@@ -105,7 +110,6 @@ public class Chess : Game
             }
         }
         else if(mouse.LeftButton == ButtonState.Pressed && posX >= 0 && posX < Board.width && posY >= 0 && posY < Board.height){
-            Console.WriteLine(Board.height / 2 - 2);
             if(posY == Board.height / 2 - 1){
                 if(posX == Board.width / 2 - 2){
                     board.board[board.toPromote.pos.Item1, board.toPromote.pos.Item2] = new Knight(board.toPromote.isWhite, board.toPromote.pos);
